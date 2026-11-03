@@ -5,14 +5,15 @@
 > 📘 *Mẫu README này là khung hướng dẫn. Sinh viên chỉ cần điền thông tin của nhóm và nội dung dự án theo từng mục.*
 
 ---
-
+	
 ## 🧑‍💻 THÔNG TIN NHÓM
 
 | STT | Họ và Tên | MSSV | Email | Đóng góp |
 |-----|-----------|------|-------|----------|
-| 1 | Nguyễn Văn A | 20IT001 | a@example.com | ... |
-| 2 | Trần Thị B | 20IT002 | b@example.com | ... |
-| 3 | Lê Văn C | 20IT003 | c@example.com | ... |
+| 1 | Đỗ Văn Quang Huy | B23DCCN382 | a@example.com | ... |
+| 2 | Đặng Kỳ Vĩ | B23DCCN914 | b@example.com | ... |
+| 3 | Nguyễn Văn An	
+ | B23DCCN004 | c@example.com | ... |
 
 **Tên nhóm:** Nhóm 01 – Lập trình mạng  
 **Chủ đề đã đăng ký:** (…)
