@@ -1,8 +1,7 @@
 # BÀI TẬP LỚN: LẬP TRÌNH MẠNG  
 
-## [Tên dự án của nhóm]
+## Website Quiz 
 
-> 📘 *Mẫu README này là khung hướng dẫn. Sinh viên chỉ cần điền thông tin của nhóm và nội dung dự án theo từng mục.*
 
 ---
 	
@@ -14,8 +13,8 @@
 | 2 | Đặng Kỳ Vĩ | B23DCCN914 | b@example.com | ... |
 | 3 | Nguyễn Văn An	| B23DCCN004 | c@example.com | ... |
 
-**Tên nhóm:** Nhóm 01 – Lập trình mạng  
-**Chủ đề đã đăng ký:** (…)
+**Tên nhóm:** Nhóm 04 – Lập trình mạng  
+**Chủ đề đã đăng ký:** Website Quiz
 
 ---
 
