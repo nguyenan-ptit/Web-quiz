@@ -12,8 +12,7 @@
 |-----|-----------|------|-------|----------|
 | 1 | Đỗ Văn Quang Huy | B23DCCN382 | a@example.com | ... |
 | 2 | Đặng Kỳ Vĩ | B23DCCN914 | b@example.com | ... |
-| 3 | Nguyễn Văn An	
- | B23DCCN004 | c@example.com | ... |
+| 3 | Nguyễn Văn An	| B23DCCN004 | c@example.com | ... |
 
 **Tên nhóm:** Nhóm 01 – Lập trình mạng  
 **Chủ đề đã đăng ký:** (…)
