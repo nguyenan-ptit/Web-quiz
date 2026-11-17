@@ -1,0 +1,7 @@
+# client
+client/node_modules/
+client/dist/
+*.log
+.DS_Store
+.playwright-mcp/
+client/tsconfig.tsbuildinfo
