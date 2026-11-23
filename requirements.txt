@@ -1,0 +1,11 @@
+# Yêu cầu môi trường (dự án không sử dụng Python/pip).
+# Frontend: Node.js >= 18, npm; dependency: source/client/package.json và package-lock.json.
+# Backend: Java >= 17, Maven >= 3.6; dependency: source/server/pom.xml.
+# Database: MySQL 8.0.16 trở lên (khuyến nghị MySQL 8.0).
+# Cấu hình kết nối: .env ở thư mục gốc.
+# FE: cd source/client && npm ci && npm run dev
+# BE: cd source/server && mvn spring-boot:run
+# Tự tạo database quiz với charset utf8mb4 trước khi chạy BE.
+# Flyway sẽ tạo bảng; giữ migration trong source/server/src/main/resources/db/migration.
+# Không còn tài khoản demo tự tạo. Đăng nhập dùng tài khoản thật trong DB của bạn.
+# Khi host FE riêng sau build, cấu hình reverse proxy /api và /ws tới BE.
