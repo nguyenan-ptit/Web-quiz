@@ -1,6 +1,10 @@
+
 client/node_modules/
 client/dist/
 server/target/
 .env
 *.log
 client/*.tsbuildinfo
+.DS_Store
+.playwright-mcp/
+source/client/.agents

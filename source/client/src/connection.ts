@@ -1,5 +1,3 @@
-import { previewConnection, previewEnabled } from './preview';
-
 export type User = { userId: number; displayName: string; isGuest: boolean };
 export type Member = User & { online: boolean };
 export type Room = { roomId: string; roomCode: string; title: string; status: string; visibility: string; hasPassword: boolean; hostUserId: number; maxPlayers: number; memberCount: number; members: Member[]; roomVersion: number };
@@ -7,6 +5,10 @@ export type Event = { type: string; requestId: string | null; serverTime: number
 export type State = { user: User | null; room: Room | null; status: 'idle'|'connecting'|'connected'|'reconnecting'|'expired'|'replaced'; message: string; pending: boolean };
 type Pending = { frame: string; resolve: () => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> };
 export class RoomConnection {
+  constructor(private log: (dir: 'in' | 'out', type: string, body: unknown) => void = () => {}) {}
+  private write(ws: WebSocket, frame: string) {
+    const message = JSON.parse(frame); this.log('out', message.type, message); ws.send(frame);
+  }
   private state: State = {user:null,room:null,status:'idle',message:'',pending:false};
   private listeners = new Set<() => void>();
   private socket?: WebSocket;
@@ -29,18 +31,27 @@ export class RoomConnection {
     this.stop(); this.token=token; this.stopped=false; this.retry=0;
     this.update({user,room:null,message:'',status:'connecting'}); this.connect();
   }
+  reconnectNow() {
+    if (!this.token || !this.state.user) return;
+    clearTimeout(this.retryTimer); clearInterval(this.heartbeat);
+    const previous = this.socket; this.socket = undefined; previous?.close();
+    this.stopped = false; this.retry = 0;
+    this.update({status: 'reconnecting'});
+    this.connect();
+  }
   private connect() {
     if(this.stopped) return;
     const ws=new WebSocket(`${location.protocol==='https:'?'wss:':'ws:'}//${location.host}/ws`); this.socket=ws;
     let authed=false;
-    ws.onopen=()=>{ if(this.socket!==ws) return; ws.send(JSON.stringify({type:'AUTH',requestId:crypto.randomUUID(),payload:{token:this.token}})); };
+    ws.onopen=()=>{ if(this.socket!==ws) return; this.write(ws,JSON.stringify({type:'AUTH',requestId:crypto.randomUUID(),payload:{token:this.token}})); };
     ws.onmessage=({data})=>{
       if(this.socket!==ws || this.stopped) return;
       let e: Event; try { e=JSON.parse(data); } catch { return; }
+      this.log('in', e.type, e);
       if(e.type==='AUTH_OK') {
-        authed=true; this.retry=0; this.update({user:e.payload,status:'connected'});
-        this.heartbeat=setInterval(()=>{if(ws.readyState===WebSocket.OPEN) ws.send(JSON.stringify({type:'PING',requestId:crypto.randomUUID(),payload:{}}));},10000);
-        this.pending.forEach(p=>ws.send(p.frame));
+        authed=true; this.retry=0; this.update({user:e.payload,room:null,status:'connected'});
+        this.heartbeat=setInterval(()=>{if(ws.readyState===WebSocket.OPEN) this.write(ws,JSON.stringify({type:'PING',requestId:crypto.randomUUID(),payload:{}}));},10000);
+        this.pending.forEach(p=>this.write(ws,p.frame));
       } else if(e.type==='ROOM_STATE'||e.type==='ROOM_UPDATED') {
         const next=e.payload as Room; const current=this.state.room;
         if(!current || current.roomId!==next.roomId || next.roomVersion>=current.roomVersion) this.update({room:next});
@@ -83,9 +94,7 @@ export class RoomConnection {
     this.update({message:'',pending:true});
     return new Promise<void>((resolve,reject)=>{
       const timer=setTimeout(()=>{this.pending.delete(id);this.update({pending:false,message:'Chưa nhận được phản hồi. Kiểm tra trạng thái phòng trước khi thử lại.'});reject(new Error('Hết thời gian chờ phản hồi.'));},30000);
-      this.pending.set(id,{frame,resolve,reject,timer}); this.socket!.send(frame);
+      this.pending.set(id,{frame,resolve,reject,timer}); this.write(this.socket!,frame);
     });
   }
 }
-export const connection=previewEnabled ? previewConnection : new RoomConnection();
-window.addEventListener('pagehide',()=>connection.stop());
